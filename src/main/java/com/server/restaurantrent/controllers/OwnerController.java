@@ -41,7 +41,7 @@ public class OwnerController {
             return ownerRepository.findById(id).get().toString();
         }
         else {
-            return "Нихуя не найдено";
+            return "Пользователь не найден";
         }
 
     }

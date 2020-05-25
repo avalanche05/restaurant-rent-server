@@ -28,11 +28,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Owner{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "Email: "+email +"\n"+"Id: "+id;
     }
 
     public Long getId() {

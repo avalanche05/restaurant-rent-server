@@ -1,5 +1,6 @@
 package com.server.restaurantrent.controllers;
 
+import com.server.restaurantrent.models.Owner;
 import com.server.restaurantrent.models.User;
 import com.server.restaurantrent.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,16 @@ public class UserController {
                 return temp.getId()+"";
             }
         }
-        return "Not found";
+        return "Пользователь не найден";
     }
     @PostMapping("/user/get")
     @ResponseStatus(HttpStatus.FOUND)
-    public String ownerGet(@RequestParam long id,Model model){
+    public String userGet(@RequestParam long id,Model model){
         if (userRepository.existsById(id)){
             return userRepository.findById(id).get().toString();
         }
         else {
-            return "Нихуя не найдено";
+            return "Пользователь не найден";
         }
 
     }
