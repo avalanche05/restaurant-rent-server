@@ -5,10 +5,7 @@ import com.server.restaurantrent.repo.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class OwnerController {
@@ -44,5 +41,9 @@ public class OwnerController {
             return "Пользователь не найден";
         }
 
+    }
+    @GetMapping("/")
+    public String test(){
+        return "test";
     }
 }
