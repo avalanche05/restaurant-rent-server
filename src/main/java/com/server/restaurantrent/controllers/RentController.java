@@ -1,11 +1,15 @@
 package com.server.restaurantrent.controllers;
 
+import com.mysql.cj.xdevapi.JsonArray;
 import com.server.restaurantrent.models.Board;
 import com.server.restaurantrent.models.Rent;
 import com.server.restaurantrent.models.Restaurant;
 import com.server.restaurantrent.repo.BoardRepository;
 import com.server.restaurantrent.repo.RentRepository;
 import com.server.restaurantrent.repo.RestaurantRepository;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -33,7 +37,7 @@ public class RentController {
 
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model){
+    public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model) throws JSONException {
         Rent order = new Rent(idUser,idTables,date,idOwner,time);
         for (Rent temp : orderRepository.findAll()){
             if((temp.getDate()).equals(date)){
@@ -48,7 +52,7 @@ public class RentController {
 
         for(Board temp : boardRepository.findAll()){
             log.info(idTables.split(",")[0].concat("[")+"АЙ ДИ ВЫТАЩЕННОЕ ИЗ ДЖИСОНА");
-            if(temp.getId() == Long.parseLong(idTables.split(",")[0].concat("["))){
+            if(temp.getId() == getTables(idTables).get(0)){
                 order.setIdRestaurant(temp.getIdRestaurant());
                 break;
             }
@@ -68,4 +72,14 @@ public class RentController {
         }
         return rents;
    }
+    public static ArrayList<Long> getTables(String response) throws JSONException {
+        JSONArray tablesJson = new JSONArray(response);
+        ArrayList<Long> tables = new ArrayList<>();
+        for(int i = 0; i < tablesJson.length(); i++){
+
+
+            tables.add(tablesJson.getLong(i)) ;
+        }
+        return tables;
+    }
 }
