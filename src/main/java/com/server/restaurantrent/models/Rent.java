@@ -18,6 +18,7 @@ public class Rent {
     private String date;
     private Long idOwner;
     private String time;
+    private Restaurant restaurant;
 
     public Rent() {
     }
@@ -77,5 +78,13 @@ public class Rent {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 }

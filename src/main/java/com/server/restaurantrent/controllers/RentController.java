@@ -1,7 +1,11 @@
 package com.server.restaurantrent.controllers;
 
+import com.server.restaurantrent.models.Board;
 import com.server.restaurantrent.models.Rent;
+import com.server.restaurantrent.models.Restaurant;
+import com.server.restaurantrent.repo.BoardRepository;
 import com.server.restaurantrent.repo.RentRepository;
+import com.server.restaurantrent.repo.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -18,6 +22,12 @@ public class RentController {
     @Autowired
     private RentRepository orderRepository;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
+
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model){
@@ -32,16 +42,25 @@ public class RentController {
 
             }
         }
+
+        for(Board temp : boardRepository.findAll()){
+            System.out.println(idTables.split(",")[0].concat("["));
+            if(temp.getId() == Long.parseLong(idTables.split(",")[0].concat("["))){
+                order.setRestaurant(restaurantRepository.findById(temp.getIdRestaurant()).get());
+                break;
+            }
+        }
+
         orderRepository.save(order);
         return "ЗАКАЗ СОЗДАН";
     }
     @PostMapping("/rent/get")
-    public ArrayList<String> rentGet(@RequestParam Long idOwner,Model model){
+    public ArrayList<Rent> rentGet(@RequestParam Long idOwner,Model model){
         System.out.println(idOwner);
-        ArrayList<String> rents = new ArrayList<>();
+        ArrayList<Rent> rents = new ArrayList<>();
         for(Rent temp : orderRepository.findAll()){
            if(temp.getIdOwner().equals(idOwner) ){
-                rents.add(temp.getIdTables());
+                rents.add(temp);
             }
         }
         return rents;
