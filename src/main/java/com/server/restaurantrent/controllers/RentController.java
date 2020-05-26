@@ -51,7 +51,6 @@ public class RentController {
         }
 
         for(Board temp : boardRepository.findAll()){
-            log.info(idTables.split(",")[0].concat("[")+"АЙ ДИ ВЫТАЩЕННОЕ ИЗ ДЖИСОНА");
             if(temp.getId() == getTables(idTables).get(0)){
                 order.setIdRestaurant(temp.getIdRestaurant());
                 break;
@@ -61,9 +60,8 @@ public class RentController {
         orderRepository.save(order);
         return "ЗАКАЗ СОЗДАН";
     }
-    @PostMapping("/rent/get")
-    public ArrayList<Rent> rentGet(@RequestParam Long idOwner,Model model){
-        System.out.println(idOwner);
+    @PostMapping("owner/rent/get")
+    public ArrayList<Rent> rentGetOwner(@RequestParam Long idOwner,Model model){
         ArrayList<Rent> rents = new ArrayList<>();
         for(Rent temp : orderRepository.findAll()){
            if(temp.getIdOwner().equals(idOwner) ){
@@ -72,13 +70,21 @@ public class RentController {
         }
         return rents;
    }
+    @PostMapping("user/rent/get")
+    public ArrayList<Rent> rentGetUser(@RequestParam Long idUser,Model model){
+        ArrayList<Rent> rents = new ArrayList<>();
+        for(Rent temp : orderRepository.findAll()){
+            if(temp.getIdUser().equals(idUser) ){
+                rents.add(temp);
+            }
+        }
+        return rents;
+    }
     public static ArrayList<Long> getTables(String response) throws JSONException {
         JSONArray tablesJson = new JSONArray(response);
         ArrayList<Long> tables = new ArrayList<>();
         for(int i = 0; i < tablesJson.length(); i++){
-
-
-            tables.add(tablesJson.getLong(i)) ;
+            tables.add(tablesJson.getLong(i));
         }
         return tables;
     }
