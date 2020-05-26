@@ -17,15 +17,17 @@ public class Rent {
     private String idTables;
     private String date;
     private Long idOwner;
+    private String time;
 
     public Rent() {
     }
 
-    public Rent(Long idUser, String idTables, String date,Long idOwner) {
+    public Rent(Long idUser, String idTables, String date, Long idOwner, String time) {
         this.idUser = idUser;
         this.idTables = idTables;
         this.date = date;
         this.idOwner = idOwner;
+        this.time = time;
     }
 
     public Long getId() {
@@ -67,5 +69,13 @@ public class Rent {
 
     public void setIdOwner(Long idOwner) {
         this.idOwner = idOwner;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

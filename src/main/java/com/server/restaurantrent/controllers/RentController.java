@@ -20,8 +20,18 @@ public class RentController {
 
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,Long idOwner, Model model){
-        Rent order = new Rent(idUser,idTables,date,idOwner);
+    public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model){
+        Rent order = new Rent(idUser,idTables,date,idOwner,time);
+        for (Rent temp : orderRepository.findAll()){
+            if((temp.getDate()).equals(date)){
+                double hoursTemp = Integer.parseInt(temp.getTime().split(":")[0]) + (Double.parseDouble(temp.getTime().split(":")[1])/60);
+                double hoursUser = Integer.parseInt(time.split(":")[0]) + (Double.parseDouble(time.split(":")[1])/60);
+                if(Math.abs(hoursTemp - hoursUser) >= 1.5){
+                    return "Стол уже забронирован";
+                }
+
+            }
+        }
         orderRepository.save(order);
         return "ЗАКАЗ СОЗДАН";
     }
