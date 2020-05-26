@@ -26,7 +26,7 @@ public class RentController {
             if((temp.getDate()).equals(date)){
                 double hoursTemp = Integer.parseInt(temp.getTime().split(":")[0]) + (Double.parseDouble(temp.getTime().split(":")[1])/60);
                 double hoursUser = Integer.parseInt(time.split(":")[0]) + (Double.parseDouble(time.split(":")[1])/60);
-                if(Math.abs(hoursTemp - hoursUser) >= 1.5){
+                if(Math.abs(hoursTemp - hoursUser) < 1.5){
                     return "Стол уже забронирован";
                 }
 
