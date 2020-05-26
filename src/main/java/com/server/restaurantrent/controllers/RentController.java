@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 @RestController
 public class RentController {
@@ -27,6 +28,8 @@ public class RentController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    private static Logger log = Logger.getLogger(RentController.class.getName());
 
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,7 +47,7 @@ public class RentController {
         }
 
         for(Board temp : boardRepository.findAll()){
-            System.out.println(idTables.split(",")[0].concat("["));
+            log.info(idTables.split(",")[0].concat("[")+"АЙ ДИ ВЫТАЩЕННОЕ ИЗ ДЖИСОНА");
             if(temp.getId() == Long.parseLong(idTables.split(",")[0].concat("["))){
                 order.setIdRestaurant(temp.getIdRestaurant());
                 break;
