@@ -80,6 +80,11 @@ public class RentController {
         }
         return rents;
     }
+    @PostMapping("rent/delete")
+    public String deleteRent(@RequestParam Long id,Model model){
+        orderRepository.deleteById(id);
+        return "Бронь успешно удалена";
+    }
     public static ArrayList<Long> getTables(String response) throws JSONException {
         JSONArray tablesJson = new JSONArray(response);
         ArrayList<Long> tables = new ArrayList<>();
