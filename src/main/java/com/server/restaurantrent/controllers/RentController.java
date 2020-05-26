@@ -46,7 +46,7 @@ public class RentController {
         for(Board temp : boardRepository.findAll()){
             System.out.println(idTables.split(",")[0].concat("["));
             if(temp.getId() == Long.parseLong(idTables.split(",")[0].concat("["))){
-                order.setRestaurant(restaurantRepository.findById(temp.getIdRestaurant()).get());
+                order.setIdRestaurant(temp.getIdRestaurant());
                 break;
             }
         }
