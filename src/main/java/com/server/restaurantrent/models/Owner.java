@@ -27,7 +27,7 @@ public class Owner {
 
     @Override
     public String toString() {
-        return " ID: " + id + "\nEmail: " + email;
+        return "Email: " + email;
     }
 
     public Long getId() {
