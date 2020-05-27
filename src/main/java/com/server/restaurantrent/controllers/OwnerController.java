@@ -16,17 +16,17 @@ public class OwnerController {
     @PostMapping("/owner/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String ownerAdd(@RequestParam String email,@RequestParam String password, Model model){
+        for(Owner temp : ownerRepository.findAll()){
+            if(email.contains(temp.getEmail())){
+                return "Пользователь уже зарегестрирован";
+            }
+        }
         Owner owner = new Owner(email,password);
         return ownerRepository.save(owner).getId()+"";
     }
     @PostMapping("/owner/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public String ownerLogin(@RequestParam String email,@RequestParam String password, Model model){
-        for(Owner temp : ownerRepository.findAll()){
-            if(email.contains(temp.getEmail())){
-                return "Пользователь уже зарегестрирован";
-            }
-        }
         Owner owner = new Owner(email,password);
         Iterable<Owner> owners = ownerRepository.findAll();
         for (Owner temp:owners) {
