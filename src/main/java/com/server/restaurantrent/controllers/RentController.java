@@ -40,7 +40,7 @@ public class RentController {
     public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model) throws JSONException {
         Rent order = new Rent(idUser,idTables,date,idOwner,time);
         for (Rent temp : orderRepository.findAll()){
-            if((temp.getDate()).equals(date)){
+            if((temp.getDate()).equals(date)&&isIdTablesContains(getTables(temp.getIdTables()),getTables(idTables))){
                 double hoursTemp = Integer.parseInt(temp.getTime().split(":")[0]) + (Double.parseDouble(temp.getTime().split(":")[1])/60);
                 double hoursUser = Integer.parseInt(time.split(":")[0]) + (Double.parseDouble(time.split(":")[1])/60);
                 if(Math.abs(hoursTemp - hoursUser) < 1.5){
@@ -92,5 +92,15 @@ public class RentController {
             tables.add(tablesJson.getLong(i));
         }
         return tables;
+    }
+    public boolean isIdTablesContains(ArrayList<Long> idTables1, ArrayList<Long> idTables2){
+        for (long temp1 : idTables1) {
+            for(long temp2 : idTables2){
+                if (temp1 == temp2){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
