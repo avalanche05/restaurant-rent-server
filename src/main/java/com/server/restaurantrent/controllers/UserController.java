@@ -20,6 +20,11 @@ public class UserController {
     @PostMapping("/user/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String ownerAdd(@RequestParam String email, @RequestParam String password, Model model){
+        for (User temp : userRepository.findAll()){
+            if(email.contains(temp.getEmail())){
+                return "Пользователь уже зарегистрирован";
+            }
+        }
         User user = new User(email,password);
         return userRepository.save(user).getId()+"";
     }
