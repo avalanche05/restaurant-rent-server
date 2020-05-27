@@ -18,7 +18,7 @@ public class OwnerController {
     public String ownerAdd(@RequestParam String email,@RequestParam String password, Model model){
         for(Owner temp : ownerRepository.findAll()){
             if(email.contains(temp.getEmail())){
-                return "Пользователь уже зарегестрирован";
+                return "Пользователь уже зарегистрирован";
             }
         }
         Owner owner = new Owner(email,password);
