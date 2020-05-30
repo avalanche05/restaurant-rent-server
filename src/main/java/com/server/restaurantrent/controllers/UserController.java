@@ -21,7 +21,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User signUpUser(@RequestParam String email, @RequestParam String password, Model model){
         for (User temp : userRepository.findAll()){
-            if(email.contains(temp.getEmail())){
+            if(email.equals(temp.getEmail())){
                 return new User();
             }
         }
