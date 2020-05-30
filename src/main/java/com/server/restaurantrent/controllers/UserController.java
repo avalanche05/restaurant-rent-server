@@ -22,7 +22,7 @@ public class UserController {
     public User signUpUser(@RequestParam String email, @RequestParam String password, Model model){
         for (User temp : userRepository.findAll()){
             if(email.contains(temp.getEmail())){
-                return new User("edc","ihhg");
+                return new User();
             }
         }
         User user = new User(email,password);
