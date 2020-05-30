@@ -19,10 +19,10 @@ public class UserController {
 
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public User ownerAdd(@RequestParam String email, @RequestParam String password, Model model){
+    public User signUpUser(@RequestParam String email, @RequestParam String password, Model model){
         for (User temp : userRepository.findAll()){
             if(email.contains(temp.getEmail())){
-                return new User();
+                return new User("edc","ihhg");
             }
         }
         User user = new User(email,password);
@@ -30,7 +30,7 @@ public class UserController {
     }
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User ownerLogin(@RequestParam String email,@RequestParam String password, Model model){
+    public User loginUser1(@RequestParam String email,@RequestParam String password, Model model){
         User user = new User(email,password);
         Iterable<User> users = userRepository.findAll();
         for (User temp:users) {
@@ -40,16 +40,6 @@ public class UserController {
         }
         return new User();
     }
-    @PostMapping("/user/get")
-    @ResponseStatus(HttpStatus.FOUND)
-    public String userGet(@RequestParam long id,Model model){
-        if (userRepository.existsById(id)){
-            return userRepository.findById(id).get().toString();
-        }
-        else {
-            return "Пользователь не найден";
-        }
 
-    }
 }
 
