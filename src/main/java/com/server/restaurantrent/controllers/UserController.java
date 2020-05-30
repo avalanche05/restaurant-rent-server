@@ -30,15 +30,15 @@ public class UserController {
     }
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String ownerLogin(@RequestParam String email,@RequestParam String password, Model model){
+    public User ownerLogin(@RequestParam String email,@RequestParam String password, Model model){
         User user = new User(email,password);
         Iterable<User> users = userRepository.findAll();
         for (User temp:users) {
             if(temp.getEmail().equals(email) && temp.getPassword().equals(password)){
-                return temp.getId()+"";
+                return temp;
             }
         }
-        return "Пользователь не найден";
+        return new User();
     }
     @PostMapping("/user/get")
     @ResponseStatus(HttpStatus.FOUND)
