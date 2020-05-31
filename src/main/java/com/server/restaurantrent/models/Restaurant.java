@@ -20,8 +20,8 @@ public class Restaurant {
     public Restaurant() {
     }
 
-    public Restaurant(long idRestaurant, String name, String address) {
-        this.idOwner = idRestaurant;
+    public Restaurant(long idOwner, String name, String address) {
+        this.idOwner = idOwner;
         this.name = name;
         this.address = address;
     }

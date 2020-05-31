@@ -60,7 +60,7 @@ public class RentController {
         orderRepository.save(order);
         return "ЗАКАЗ СОЗДАН";
     }
-    @PostMapping("owner/rent/get")
+    @PostMapping("rent/owner/get")
     public ArrayList<Rent> rentGetOwner(@RequestParam Long idOwner,Model model){
         ArrayList<Rent> rents = new ArrayList<>();
         for(Rent temp : orderRepository.findAll()){
@@ -70,8 +70,8 @@ public class RentController {
         }
         return rents;
    }
-    @PostMapping("user/rent/get")
-    public ArrayList<Rent> rentGetUser(@RequestParam Long idUser,Model model){
+    @PostMapping("rent/user/get")
+    public ArrayList<Rent> getUserRent(@RequestParam Long idUser,Model model){
         ArrayList<Rent> rents = new ArrayList<>();
         for(Rent temp : orderRepository.findAll()){
             if(temp.getIdUser().equals(idUser) ){
