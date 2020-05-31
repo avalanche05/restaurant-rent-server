@@ -5,16 +5,18 @@ import com.server.restaurantrent.models.Restaurant;
 import com.server.restaurantrent.repo.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RestaurantController {
 
-    //ВКЛЮЧИ СЕРВЕР ДУРАК!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -34,9 +36,9 @@ public class RestaurantController {
             }
         return restaurants;
     }
-    @PostMapping("/restaurant/all")
-    public ArrayList<Restaurant> restaurantGetAll(Model model){
-        ArrayList<Restaurant> restaurants = new ArrayList<>();
+    @GetMapping("/restaurant/all")
+    public List<Restaurant> restaurantGetAll(){
+        List<Restaurant> restaurants = new ArrayList<>();
             for(Restaurant temp : restaurantRepository.findAll()){
                 restaurants.add(temp);
             }
