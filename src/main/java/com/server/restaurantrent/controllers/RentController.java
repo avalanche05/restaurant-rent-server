@@ -37,12 +37,11 @@ public class RentController {
 
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String rentAdd(@RequestParam Long idUser, @RequestParam String idTables,String date,String time,Long idOwner, Model model) throws JSONException {
-        Rent order = new Rent(idUser,idTables,date,idOwner,time);
+    public String rentAdd(@RequestParam Rent rent, Model model) throws JSONException {
         for (Rent temp : orderRepository.findAll()){
-            if((temp.getDate()).equals(date)&&isIdTablesContains(getTables(temp.getIdTables()),getTables(idTables))){
+            if((temp.getDate()).equals(rent.getDate())&&isIdTablesContains(getTables(temp.getIdTables()),getTables(rent.getIdTables()))){
                 double hoursTemp = Integer.parseInt(temp.getTime().split(":")[0]) + (Double.parseDouble(temp.getTime().split(":")[1])/60);
-                double hoursUser = Integer.parseInt(time.split(":")[0]) + (Double.parseDouble(time.split(":")[1])/60);
+                double hoursUser = Integer.parseInt(rent.getTime().split(":")[0]) + (Double.parseDouble(rent.getTime().split(":")[1])/60);
                 if(Math.abs(hoursTemp - hoursUser) < 1.5){
                     return "Столы уже забронированы";
                 }
@@ -51,13 +50,13 @@ public class RentController {
         }
 
         for(Board temp : boardRepository.findAll()){
-            if(temp.getId() == getTables(idTables).get(0)){
-                order.setIdRestaurant(temp.getIdRestaurant());
+            if(temp.getId() == getTables(rent.getIdTables()).get(0)){
+                rent.setIdRestaurant(temp.getIdRestaurant());
                 break;
             }
         }
 
-        orderRepository.save(order);
+        orderRepository.save(rent);
         return "ЗАКАЗ СОЗДАН";
     }
     @PostMapping("rent/owner/get")
