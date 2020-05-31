@@ -13,10 +13,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -37,7 +34,7 @@ public class RentController {
 
     @PostMapping("/rent/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String rentAdd(@RequestParam Rent rent, Model model) throws JSONException {
+    public String rentAdd(@RequestBody Rent rent, Model model) throws JSONException {
         for (Rent temp : orderRepository.findAll()){
             if((temp.getDate()).equals(rent.getDate())&&isIdTablesContains(getTables(temp.getIdTables()),getTables(rent.getIdTables()))){
                 double hoursTemp = Integer.parseInt(temp.getTime().split(":")[0]) + (Double.parseDouble(temp.getTime().split(":")[1])/60);
