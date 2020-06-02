@@ -7,10 +7,7 @@ import com.server.restaurantrent.repo.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -22,10 +19,11 @@ public class BoardController {
 
     @PostMapping("/table/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String tableAdd(@RequestParam long idRestaurant, @RequestParam float x,@RequestParam float y, Model model){
-        Board table = new Board(idRestaurant,x,y);
-        tableRepository.save(table);
-        return "СТОЛ УСПЕШНО ДОБАВЛЕН В БАЗУ ДАННЫХ";
+    public String tableAdd(@RequestBody ArrayList<Board> tables){
+        for (Board temp : tables){
+            tableRepository.save(temp);
+        }
+        return "Столы успешно сохранены!";
     }
     @PostMapping("/table/get")
     @ResponseStatus(HttpStatus.CREATED)
