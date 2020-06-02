@@ -1,6 +1,6 @@
 package com.server.restaurantrent.controllers;
 
-import com.server.restaurantrent.models.Owner;
+
 import com.server.restaurantrent.models.User;
 import com.server.restaurantrent.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserController {
     }
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User loginUser1(@RequestParam String email,@RequestParam String password, Model model){
+    public User loginUser(@RequestParam String email,@RequestParam String password, Model model){
         User user = new User(email,password);
         Iterable<User> users = userRepository.findAll();
         for (User temp:users) {
