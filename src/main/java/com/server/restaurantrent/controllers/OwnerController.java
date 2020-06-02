@@ -17,7 +17,7 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.CREATED)
     public Owner ownerSignUp(@RequestParam String email,@RequestParam String password, Model model){
         for(Owner temp : ownerRepository.findAll()){
-            if(email.contains(temp.getEmail())){
+            if(email.equals(temp.getEmail())){
                 return new Owner();
             }
         }
