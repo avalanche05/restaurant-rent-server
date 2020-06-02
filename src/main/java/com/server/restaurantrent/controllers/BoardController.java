@@ -23,7 +23,7 @@ public class BoardController {
         for (Board temp : tables){
             tableRepository.save(temp);
         }
-        return "Столы успешно сохранены!";
+        return tables.size()+"";
     }
     @PostMapping("/table/get")
     @ResponseStatus(HttpStatus.CREATED)
