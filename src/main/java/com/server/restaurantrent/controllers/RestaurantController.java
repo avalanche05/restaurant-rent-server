@@ -2,6 +2,7 @@ package com.server.restaurantrent.controllers;
 
 import com.server.restaurantrent.models.Owner;
 import com.server.restaurantrent.models.Restaurant;
+import com.server.restaurantrent.repo.RentRepository;
 import com.server.restaurantrent.repo.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
 
     @PostMapping("/restaurant/add")
     public Restaurant restaurantAdd(@RequestBody Restaurant restaurant){
