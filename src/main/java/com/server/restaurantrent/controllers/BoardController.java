@@ -20,7 +20,10 @@ public class BoardController {
     @PostMapping("/table/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String tableAdd(@RequestBody ArrayList<Board> tables){
-        tableRepository.deleteAll(tables);
+        for (Board temp : tableRepository.findAll()){
+            if(temp.getIdRestaurant() == tables.get(0).getIdRestaurant())
+                tableRepository.delete(temp);
+        }
         for (Board temp : tables){
             tableRepository.save(temp);
         }
