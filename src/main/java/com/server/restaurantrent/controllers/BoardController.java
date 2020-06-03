@@ -20,10 +20,11 @@ public class BoardController {
     @PostMapping("/table/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String tableAdd(@RequestBody ArrayList<Board> tables){
+        tableRepository.deleteAll(tables);
         for (Board temp : tables){
             tableRepository.save(temp);
         }
-        return tables.size()+"";
+        return "Столы успешно добавлены";
     }
     @PostMapping("/table/get")
     @ResponseStatus(HttpStatus.CREATED)
