@@ -23,6 +23,12 @@ public class RestaurantController {
         return restaurantRepository.save(restaurant);
     }
 
+    @PostMapping("/restaurant/delete")
+    public String restaurantDelete(@RequestParam Long id){
+        restaurantRepository.deleteById(id);
+        return "Ресторан успешно удалён";
+    }
+
     @PostMapping("/restaurant/get")
     public ArrayList<Restaurant> restaurantGet(@RequestParam Long idOwner, Model model){
         ArrayList<Restaurant> restaurants = new ArrayList<>();
