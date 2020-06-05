@@ -34,9 +34,9 @@ public class UserController {
         }
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo("someone@abc.com");
+        mailMessage.setTo(email);
         mailMessage.setSubject("This is the test message for testing gmail smtp server using spring mail");
-        mailMessage.setFrom("abc@gmail.com");
+        mailMessage.setFrom(email);
         mailMessage.setText("This is the test message for testing gmail smtp server using spring mail. \n" +
                 "Thanks \n Regards \n Saurabh ");
 
