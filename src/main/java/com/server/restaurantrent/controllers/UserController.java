@@ -95,6 +95,11 @@ public class UserController {
         return new User();
     }
 
+    @PostMapping("/user/confirm")
+    public Boolean isConfirm(@RequestParam Long id){
+        return userRepository.findById(id).get().getAuth();
+    }
+
     @GetMapping("/")
     public String test(){
         return "test";
