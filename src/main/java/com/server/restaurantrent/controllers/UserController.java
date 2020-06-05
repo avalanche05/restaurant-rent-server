@@ -52,7 +52,7 @@ public class UserController {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("prostovana304@gmail.com","Ineznay555");
+                        return new PasswordAuthentication("restaurantrent0@gmail.com","ServerPass");
                     }
                 });
         User user = new User(email,password);
@@ -60,13 +60,13 @@ public class UserController {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("prostovana304@gmail.com"));
+            message.setFrom(new InternetAddress("restaurantrent0@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("avalanche4533@gmail.com"));
+                    InternetAddress.parse("buran05@icloud.com"));
             message.setSubject("Подтверждение электронной почты");
             String uniqueToken = "test";
             message.setText("Добро пожаловть!," +
-                    "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm" + uniqueToken);
+                    "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm/" + uniqueToken);
 
 
 
