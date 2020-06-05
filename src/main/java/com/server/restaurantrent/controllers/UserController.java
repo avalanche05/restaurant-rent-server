@@ -64,7 +64,7 @@ public class UserController {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse("avalanche4533@gmail.com"));
             message.setSubject("Подтверждение электронной почты");
-            String uniqueToken = UUID.randomUUID().toString();
+            String uniqueToken = "test";
             message.setText("Добро пожаловть!," +
                     "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm" + uniqueToken);
 
