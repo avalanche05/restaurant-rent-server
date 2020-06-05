@@ -2,15 +2,23 @@ package com.server.restaurantrent.controllers;
 
 
 
+import com.server.restaurantrent.models.AuthToken;
 import com.server.restaurantrent.models.User;
+import com.server.restaurantrent.repo.AuthTokenRepository;
 import com.server.restaurantrent.repo.UserRepository;
-import com.server.restaurantrent.services.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.*;
+import javax.swing.plaf.UIResource;
+import java.util.Properties;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -19,7 +27,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private EmailSenderService emailSenderService;
+    private AuthTokenRepository authTokenRepository;
 
     @Autowired
     public JavaMailSender emailSender;
@@ -33,16 +41,47 @@ public class UserController {
             }
         }
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);
-        mailMessage.setSubject("This is the test message for testing gmail smtp server using spring mail");
-        mailMessage.setFrom(email);
-        mailMessage.setText("This is the test message for testing gmail smtp server using spring mail. \n" +
-                "Thanks \n Regards \n Saurabh ");
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
 
-        emailSender.send(mailMessage);
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("prostovana304@gmail.com","Ineznay555");
+                    }
+                });
         User user = new User(email,password);
-        return userRepository.save(user);
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("prostovana304@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email));
+            message.setSubject("Подтверждение электронной почты");
+            String uniqueToken = UUID.randomUUID().toString();
+            message.setText("Добро пожаловть!," +
+                    "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm" + uniqueToken);
+
+
+
+            user = userRepository.save(user);
+
+            Transport.send(message);
+
+            authTokenRepository.save(new AuthToken(uniqueToken,user.getId()));
+
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return user;
     }
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -56,6 +95,12 @@ public class UserController {
         }
         return new User();
     }
+
+    @GetMapping("/")
+    public String test(){
+        return "test";
+    }
+
 
 
 

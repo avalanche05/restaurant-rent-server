@@ -37,8 +37,5 @@ public class OwnerController {
         return new Owner();
     }
 
-    @GetMapping("/")
-    public String test(){
-        return "test";
-    }
+
 }
