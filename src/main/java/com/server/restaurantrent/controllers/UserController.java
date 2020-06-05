@@ -61,7 +61,7 @@ public class UserController {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("prostovana304@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(email));
+                    InternetAddress.parse("avalanche4533@gmail.com"));
             message.setSubject("Подтверждение электронной почты");
             String uniqueToken = UUID.randomUUID().toString();
             message.setText("Добро пожаловть!," +
