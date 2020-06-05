@@ -2,10 +2,7 @@ package com.server.restaurantrent.models;
 
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 
@@ -18,17 +15,14 @@ public class User {
     private String email;
     private String password;
 
+
+
     public User() {
     }
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "Email: "+email +"\n"+"Id: "+id;
     }
 
     public Long getId() {

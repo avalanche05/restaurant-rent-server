@@ -1,17 +1,16 @@
 package com.server.restaurantrent.controllers;
 
 
-import com.server.restaurantrent.models.ConfirmationToken;
+
 import com.server.restaurantrent.models.User;
-import com.server.restaurantrent.repo.ConfirmationTokenRepository;
 import com.server.restaurantrent.repo.UserRepository;
 import com.server.restaurantrent.services.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class UserController {
@@ -20,10 +19,10 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    private EmailSenderService emailSenderService;
 
     @Autowired
-    private EmailSenderService emailSenderService;
+    public JavaMailSender emailSender;
 
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,15 +32,15 @@ public class UserController {
                 return new User();
             }
         }
-        ConfirmationToken confirmationToken = new ConfirmationToken(new User(email,password));
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setFrom("chand312902@gmail.com");
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
 
-        emailSenderService.sendEmail(mailMessage);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo("someone@abc.com");
+        mailMessage.setSubject("This is the test message for testing gmail smtp server using spring mail");
+        mailMessage.setFrom("abc@gmail.com");
+        mailMessage.setText("This is the test message for testing gmail smtp server using spring mail. \n" +
+                "Thanks \n Regards \n Saurabh ");
+
+        emailSender.send(mailMessage);
         User user = new User(email,password);
         return userRepository.save(user);
     }
