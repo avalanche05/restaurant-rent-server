@@ -40,6 +40,8 @@ public class UserController {
                 return new User();
             }
         }
+        User user = new User(email,password);
+        user = userRepository.save(user);
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -55,8 +57,7 @@ public class UserController {
                         return new PasswordAuthentication("restaurantrent0@gmail.com","ServerPass");
                     }
                 });
-        User user = new User(email,password);
-        user = userRepository.save(user);
+
         try {
 
             Message message = new MimeMessage(session);
@@ -64,7 +65,7 @@ public class UserController {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse("buran05@icloud.com"));
             message.setSubject("Подтверждение электронной почты");
-            String uniqueToken = "test";
+            String uniqueToken = UUID.randomUUID().toString();
             message.setText("Добро пожаловть!," +
                     "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm/" + uniqueToken);
 
