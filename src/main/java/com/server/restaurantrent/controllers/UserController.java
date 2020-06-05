@@ -56,6 +56,7 @@ public class UserController {
                     }
                 });
         User user = new User(email,password);
+        user = userRepository.save(user);
         try {
 
             Message message = new MimeMessage(session);
@@ -69,7 +70,7 @@ public class UserController {
 
 
 
-            user = userRepository.save(user);
+
 
             Transport.send(message);
 
