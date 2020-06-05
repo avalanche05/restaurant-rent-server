@@ -14,6 +14,7 @@ public class User {
 
     private String email;
     private String password;
+    private Boolean isAuth = false;
 
 
 
@@ -47,6 +48,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(Boolean auth) {
+        isAuth = auth;
     }
 }
 

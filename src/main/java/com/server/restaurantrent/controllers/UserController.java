@@ -63,14 +63,11 @@ public class UserController {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("restaurantrent0@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("buran05@icloud.com"));
+                    InternetAddress.parse(email));
             message.setSubject("Подтверждение электронной почты");
             String uniqueToken = UUID.randomUUID().toString();
-            message.setText("Добро пожаловть!," +
-                    "\n\n Чтобы подтвердить адрес электронной почты перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm/" + uniqueToken);
-
-
-
+            message.setText("Добро пожаловать!," +
+                    "\n\n Чтобы подтвердить адрес электронной почты, перейдите по ссылке https://restaurant-rent-server.herokuapp.com/accuont/confirm/" + uniqueToken);
 
 
             Transport.send(message);
