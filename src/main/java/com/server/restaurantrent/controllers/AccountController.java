@@ -30,14 +30,21 @@ public class AccountController {
         for (AuthToken temp : authTokenRepository.findAll()){
             if(temp.getUuid().equals(token)){
                 for (User userTemp : userRepository.findAll()){
-                    if(userTemp.getId() == temp.getIdUser()){
+                    if(userTemp.getId().equals(temp.getIdUser())){
                         userTemp.setAuth(true);
                         userRepository.save(userTemp);
                         return "auth_success";
                     }
                 }
+                for (Owner ownerTemp : ownerRepository.findAll()){
+                    if(ownerTemp.getId().equals(temp.getIdUser())){
+                        ownerTemp.setAuth(true);
+                        ownerRepository.save(ownerTemp);
+                        return "auth_success";
+                    }
+                }
             }
         }
-        return "redirect:/";
+        return "Срок вашего токена истёк";
     }
 }

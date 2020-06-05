@@ -16,6 +16,7 @@ public class Owner {
 
     private String email;
     private String password;
+    private Boolean isAuth = false;
 
     public Owner() {
     }
@@ -52,5 +53,13 @@ public class Owner {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(Boolean auth) {
+        isAuth = auth;
     }
 }
