@@ -22,7 +22,7 @@ public class Message {
 
     public Message(long idRent, boolean isOwner, String textMessage) {
         this.idRent = idRent;
-        this.isOwner = isOwner;
+        this.isOwner = Boolean.getBoolean(Boolean.toString(isOwner));
         this.textMessage = textMessage;
     }
 
