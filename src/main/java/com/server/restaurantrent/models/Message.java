@@ -42,11 +42,11 @@ public class Message {
         this.idRent = idRent;
     }
 
-    public boolean isOwner() {
+    public Boolean isOwner() {
         return isOwner;
     }
 
-    public void setOwner(boolean owner) {
+    public void setOwner(Boolean owner) {
         isOwner = owner;
     }
 
