@@ -66,7 +66,7 @@ public class UserController {
                     InternetAddress.parse(email));
             message.setSubject("Подтверждение электронной почты");
             String uniqueToken = UUID.randomUUID().toString();
-            message.setText("Добро пожаловать!," +
+            message.setText("Добро пожаловать!" +
                     "\n\n Чтобы подтвердить адрес электронной почты, перейдите по ссылке https://restaurant-rent-server.herokuapp.com/account/confirm/" + uniqueToken);
 
 

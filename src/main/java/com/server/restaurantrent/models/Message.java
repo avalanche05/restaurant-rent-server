@@ -14,7 +14,7 @@ public class Message {
     private long id;
 
     private long idRent;
-    private boolean isOwner;
+    private Boolean isOwner;
     private String textMessage;
 
     public Message() {

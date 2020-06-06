@@ -45,6 +45,6 @@ public class AccountController {
                 }
             }
         }
-        return "Срок вашего токена истёк";
+        return "/";
     }
 }
