@@ -1,9 +1,8 @@
 package com.server.restaurantrent.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 
 @Entity
 
@@ -14,7 +13,10 @@ public class Message {
     private long id;
 
     private long idRent;
-    private Boolean isOwner;
+
+    @Column(nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean isOwner;
     private String textMessage;
 
     public Message() {
@@ -22,7 +24,7 @@ public class Message {
 
     public Message(long idRent, boolean isOwner, String textMessage) {
         this.idRent = idRent;
-        this.isOwner = Boolean.getBoolean(Boolean.toString(isOwner));
+        this.isOwner = isOwner;
         this.textMessage = textMessage;
     }
 
@@ -42,11 +44,11 @@ public class Message {
         this.idRent = idRent;
     }
 
-    public Boolean isOwner() {
+    public boolean isOwner() {
         return isOwner;
     }
 
-    public void setOwner(Boolean owner) {
+    public void setOwner(boolean owner) {
         isOwner = owner;
     }
 
