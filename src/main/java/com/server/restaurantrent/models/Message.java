@@ -14,8 +14,6 @@ public class Message {
 
     private long idRent;
 
-    @Column(nullable = false)
-    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isOwner;
     private String textMessage;
 
