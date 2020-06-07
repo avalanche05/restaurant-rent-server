@@ -18,6 +18,8 @@ public class Owner {
     private String password;
     private Boolean isAuth = false;
 
+
+
     public Owner() {
     }
 
@@ -26,9 +28,11 @@ public class Owner {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "Email: " + email;
+    public Owner(Long id, String email, String password, Boolean auth) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.isAuth = auth;
     }
 
     public Long getId() {

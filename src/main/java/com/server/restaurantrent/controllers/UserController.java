@@ -1,7 +1,6 @@
 package com.server.restaurantrent.controllers;
 
 
-
 import com.server.restaurantrent.models.AuthToken;
 import com.server.restaurantrent.models.User;
 import com.server.restaurantrent.repo.AuthTokenRepository;
@@ -15,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.swing.*;
-import javax.swing.plaf.UIResource;
 import java.util.Properties;
 import java.util.UUID;
 
 @RestController
+
+// контроллер запросов связанных с пользователем
 public class UserController {
 
     @Autowired
@@ -32,15 +31,18 @@ public class UserController {
     @Autowired
     public JavaMailSender emailSender;
 
+    // метод обрабатывает запрос регистрации пользователя
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public User signUpUser(@RequestParam String email, @RequestParam String password, Model model){
-        for (User temp : userRepository.findAll()){
-            if(email.equals(temp.getEmail())){
+    public User signUpUser(@RequestParam String email, @RequestParam String password, Model model) {
+        // проверяем уникальность электронной почты
+        for (User temp : userRepository.findAll()) {
+            if (email.equals(temp.getEmail())) {
                 return new User();
             }
         }
-        User user = new User(email,password);
+        // сохраняем пользователя в базе данных
+        User user = new User(email, password);
         user = userRepository.save(user);
 
         Properties props = new Properties();
@@ -54,25 +56,25 @@ public class UserController {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("restaurantrent0@gmail.com","ServerPass");
+                        return new PasswordAuthentication("restaurantrent0@gmail.com", "ServerPass");
                     }
                 });
 
         try {
-
+            // отправляем пользователю письмо на электронную почту
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("restaurantrent0@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Подтверждение электронной почты");
-            String uniqueToken = UUID.randomUUID().toString();
+            // генерируем случайный токен
+            String token = UUID.randomUUID().toString();
             message.setText("Добро пожаловать!" +
-                    "\n\n Чтобы подтвердить адрес электронной почты, перейдите по ссылке https://restaurant-rent-server.herokuapp.com/account/confirm/" + uniqueToken);
-
-
+                    "\n\n Чтобы подтвердить адрес электронной почты, перейдите по ссылке https://restaurant-rent-server.herokuapp.com/account/confirm/" + token);
             Transport.send(message);
 
-            authTokenRepository.save(new AuthToken(uniqueToken,user.getId()));
+            // сохраняем полученный токен в базе данных
+            authTokenRepository.save(new AuthToken(token, user.getId()));
 
 
         } catch (MessagingException e) {
@@ -82,31 +84,28 @@ public class UserController {
 
         return user;
     }
+
+    // метод обрабатывает запрос входа пользователя
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User loginUser(@RequestParam String email,@RequestParam String password, Model model){
-        User user = new User(email,password);
+    public User loginUser(@RequestParam String email, @RequestParam String password, Model model) {
+        User user = new User(email, password);
         Iterable<User> users = userRepository.findAll();
-        for (User temp:users) {
-            if(temp.getEmail().equals(email) && temp.getPassword().equals(password)){
+        // ищем пользователя в базе данных
+        for (User temp : users) {
+            if (temp.getEmail().equals(email) && temp.getPassword().equals(password)) {
                 return temp;
             }
         }
+        // если пользователь не зарегистрирован, отправляем пустого пользователя
         return new User();
     }
 
+    // метод обрабатывает запрос состояния электронной почты пользователя
     @PostMapping("/user/confirm")
-    public Boolean isConfirm(@RequestParam Long id){
+    public Boolean isConfirm(@RequestParam Long id) {
         return userRepository.findById(id).get().getAuth();
     }
-
-    @GetMapping("/")
-    public String test(){
-        return "test";
-    }
-
-
-
 
 }
 
