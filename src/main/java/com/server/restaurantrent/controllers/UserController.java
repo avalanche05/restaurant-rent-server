@@ -89,13 +89,11 @@ public class UserController {
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public User loginUser(@RequestParam String email, @RequestParam String password, Model model) {
-        User user = new User(email, password);
+        User user = userRepository.findByEmail(email);
         Iterable<User> users = userRepository.findAll();
         // ищем пользователя в базе данных
-        for (User temp : users) {
-            if (temp.getEmail().equals(email) && temp.getPassword().equals(password)) {
-                return temp;
-            }
+        if (user.getPassword().equals(password)) {
+            return user;
         }
         // если пользователь не зарегистрирован, отправляем пустого пользователя
         return new User();
