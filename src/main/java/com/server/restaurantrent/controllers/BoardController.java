@@ -2,12 +2,10 @@ package com.server.restaurantrent.controllers;
 
 
 import com.server.restaurantrent.models.Board;
-import com.server.restaurantrent.models.Rent;
 import com.server.restaurantrent.repo.BoardRepository;
 import com.server.restaurantrent.repo.RentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,19 +25,13 @@ public class BoardController {
     @PostMapping("/table/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String tableAdd(@RequestBody ArrayList<Board> tables) {
+        // берём id ресторана из любого стола(т.к. одним запросом можно прислать массив столов только с одного ресторана)
+        long idRestaurant = tables.get(0).getIdRestaurant();
         // перед добавлением удаляем все столы и заказы которые были раньше связанны с рестораном, в который мы добавляем столы
-        for (Rent temp : rentRepository.findAll()) {
-            if (temp.getIdRestaurant() == tables.get(0).getIdRestaurant())
-                rentRepository.delete(temp);
-        }
-        for (Board temp : tableRepository.findAll()) {
-            if (temp.getIdRestaurant() == tables.get(0).getIdRestaurant())
-                tableRepository.delete(temp);
-        }
+        System.out.println("Rents deleted: " + rentRepository.removeByIdRestaurant(idRestaurant));
+        System.out.println("Tables deleted: " + tableRepository.removeByIdRestaurant(idRestaurant));
         // сохранняем принятые столы в базе данных
-        for (Board temp : tables) {
-            tableRepository.save(temp);
-        }
+        tableRepository.saveAll(tables);
         return "Столы успешно добавлены";
     }
 
@@ -47,15 +39,8 @@ public class BoardController {
     @PostMapping("/table/get")
     @ResponseStatus(HttpStatus.CREATED)
     public ArrayList<Board> tableGet(@RequestParam Long idRestaurant) {
-        ArrayList<Board> tables = new ArrayList<>();
-        Iterable<Board> owners = tableRepository.findAll();
-        // находим все столы связанные с принятым id ресторана
-        for (Board temp : owners) {
-            if (temp.getIdRestaurant() == idRestaurant) {
-                tables.add(temp);
-            }
-        }
-        return tables;
+        // отправляем все столы связанные с принятым id ресторана
+        return tableRepository.findAllByIdRestaurant(idRestaurant);
     }
 }
 

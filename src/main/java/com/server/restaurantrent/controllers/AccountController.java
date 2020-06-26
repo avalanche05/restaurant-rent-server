@@ -30,54 +30,38 @@ public class AccountController {
     // метод обрабатывает запрос подтверждения электронной почты
     @GetMapping("/account/confirm/{uuid}")
     public String confirmAccount(@PathVariable String uuid, Model model) {
-        // проходим циклом по всем авторизационным токенам
-//        for (AuthToken temp : authTokenRepository.findAll()) {
-//            // проверяем существует ли заданный токен в базе данных
-//            if (temp.getUuid().equals(uuid)) {
-//                // проходим циклом по всем пользователям
-//                for (User userTemp : userRepository.findAll()) {
-//                    // если авторизационный токен относится к этому пользователя
-//                    if (userTemp.getId().equals(temp.getIdUser())) {
-//                        // делаем аккаунт пользователья подтверждённым
-//                        userTemp.setAuth(true);
-//                        // сохраняем пользователя в базе данных
-//                        userRepository.save(userTemp);
-//                        // возвращаем странницу с информацией о успешном подтверждении почты
-//                        return "auth_success";
-//                    }
-//                }
-//                // проходим циклом по всем пользователям
-//                for (Owner ownerTemp : ownerRepository.findAll()) {
-//                    // если авторизационный токен относится к этому владельцу
-//                    if (ownerTemp.getId().equals(temp.getIdUser())) {
-//                        // делаем аккаунт владельца подтверждённым
-//                        ownerTemp.setAuth(true);
-//                        // сохраняем владельца в базе данных
-//                        ownerRepository.save(ownerTemp);
-//                        // возвращаем странницу с информацией о успешном подтверждении почты
-//                        return "auth_success";
-//                    }
-//                }
-//            }
-//        }
+        // пытаемся найти токен авторизации по uuid
         AuthToken authToken = authTokenRepository.findAuthTokenByUuid(uuid);
-        if(authToken != null){
+        // проверяем, сушествует ли такой токен
+        if (authToken != null) {
+            // пытаемся найти пользователя, id которого указан в токене
             Optional<User> optionalUser = userRepository.findById(authToken.getIdUser());
-            if (optionalUser.isPresent()){
+            // проверяем, существует ли такой пользователь
+            if (optionalUser.isPresent()) {
+                // переводим Optional<User> в User
                 User user = optionalUser.get();
+                // ставим значение авторизации пользователя как положительное
                 user.setAuth(true);
+                // сохраняем изменения
                 userRepository.save(user);
-                return "auth_success";
+                // возвращаем страницу успешной авторизации
+                return "auth-success";
             }
+            // пытаемся найти владельца, id которого указан в токене
             Optional<Owner> optionalOwner = ownerRepository.findById(authToken.getIdUser());
-            if (optionalOwner.isPresent()){
+            // проверяем, существует ли такой владелец
+            if (optionalOwner.isPresent()) {
+                // переводим Optional<Owner> в Owner
                 Owner owner = optionalOwner.get();
+                // ставим значение авторизации владельца как положительное
                 owner.setAuth(true);
+                // сохраняем изменения
                 ownerRepository.save(owner);
-                return "auth_success";
+                // возвращаем страницу успешной авторизации
+                return "auth-success";
             }
         }
-        // возвращаем пустую странницу
-        return "auth_unsuccess";
+        // возвращаем страницу ошибки авторизации
+        return "auth-bad";
     }
 }

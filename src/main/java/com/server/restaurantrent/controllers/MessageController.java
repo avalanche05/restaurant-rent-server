@@ -4,10 +4,7 @@ package com.server.restaurantrent.controllers;
 import com.server.restaurantrent.models.Message;
 import com.server.restaurantrent.repo.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -30,13 +27,7 @@ public class MessageController {
     // метод обрабатывает запрос получения массива сообщений по конкретному заказу
     @PostMapping("/message/get")
     public ArrayList<Message> getMessage(@RequestParam Long idRent) {
-        ArrayList<Message> messages = new ArrayList<>();
-        // добавляем в массив сообщений те сообщения, которые относятся к заказу
-        for (Message temp : messageRepository.findAll()) {
-            if (temp.getIdRent() == idRent) {
-                messages.add(temp);
-            }
-        }
-        return messages;
+        // отправляем все сообщения, связанные с конкретным заказом
+        return messageRepository.findAllByIdRent(idRent);
     }
 }
