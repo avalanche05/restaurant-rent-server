@@ -10,12 +10,12 @@ public class AuthToken {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String uuid;
-    private Long idUser;
+    private long idUser;
 
     public AuthToken() {
     }
 
-    public AuthToken(String uuid, Long idUser) {
+    public AuthToken(String uuid, long idUser) {
         this.uuid = uuid;
         this.idUser = idUser;
     }
@@ -36,11 +36,11 @@ public class AuthToken {
         this.uuid = uuid;
     }
 
-    public Long getIdUser() {
+    public long getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(long idUser) {
         this.idUser = idUser;
     }
 }

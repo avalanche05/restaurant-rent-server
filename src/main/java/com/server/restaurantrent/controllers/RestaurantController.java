@@ -35,39 +35,22 @@ public class RestaurantController {
     @PostMapping("/restaurant/delete")
     public String restaurantDelete(@RequestParam Long id) {
         // предварительно удаляем все заказы и столы, связанные с этим рестораном
-        for (Rent temp : rentRepository.findAll()) {
-            if (temp.getIdRestaurant() == id) {
-                rentRepository.delete(temp);
-            }
-        }
-        for (Board temp : boardRepository.findAll()) {
-            if (temp.getIdRestaurant() == id) {
-                boardRepository.delete(temp);
-            }
-        }
+        rentRepository.removeByIdRestaurant(id);
+        boardRepository.removeByIdRestaurant(id);
+        // удаляем сам ресторан
         restaurantRepository.deleteById(id);
         return "Ресторан успешно удалён";
     }
 
     // метод обрабатывает запрос массива ресторанов конкретного владельца
     @PostMapping("/restaurant/get")
-    public ArrayList<Restaurant> restaurantGet(@RequestParam Long idOwner, Model model) {
-        ArrayList<Restaurant> restaurants = new ArrayList<>();
-        for (Restaurant temp : restaurantRepository.findAll()) {
-            if (temp.getIdOwner() == idOwner) {
-                restaurants.add(temp);
-            }
-        }
-        return restaurants;
+    public ArrayList<Restaurant> restaurantGet(@RequestParam Long idOwner) {
+        return  restaurantRepository.findAllByIdOwner(idOwner);
     }
 
     // метод обрабатывает запрос массива всех ресторанов
     @GetMapping("/restaurant/all")
     public ArrayList<Restaurant> restaurantGetAll() {
-        ArrayList<Restaurant> restaurants = new ArrayList<>();
-        for (Restaurant temp : restaurantRepository.findAll()) {
-            restaurants.add(temp);
-        }
-        return restaurants;
+        return (ArrayList<Restaurant>) restaurantRepository.findAll();
     }
 }

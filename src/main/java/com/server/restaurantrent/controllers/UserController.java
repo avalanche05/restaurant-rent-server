@@ -1,21 +1,18 @@
 package com.server.restaurantrent.controllers;
 
 
-import com.server.restaurantrent.models.AuthToken;
 import com.server.restaurantrent.models.User;
 import com.server.restaurantrent.repo.AuthTokenRepository;
 import com.server.restaurantrent.repo.UserRepository;
+import com.server.restaurantrent.services.AuthMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 
@@ -35,52 +32,16 @@ public class UserController {
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public User signUpUser(@RequestParam String email, @RequestParam String password, Model model) {
-        // проверяем уникальность электронной почты
-        for (User temp : userRepository.findAll()) {
-            if (email.equals(temp.getEmail())) {
-                return new User();
-            }
+        email = email.toLowerCase();
+        if (userRepository.existsByEmail(email)) {
+            return new User();
         }
-        // сохраняем пользователя в базе данных
+        // сохраняем владельца в базе данных
         User user = new User(email, password);
         user = userRepository.save(user);
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-
-        Session session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("restaurantrent0@gmail.com", "ServerPass");
-                    }
-                });
-
-        try {
-            // отправляем пользователю письмо на электронную почту
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("restaurantrent0@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(email));
-            message.setSubject("Подтверждение электронной почты");
-            // генерируем случайный токен
-            String token = UUID.randomUUID().toString();
-            message.setText("Добро пожаловать!" +
-                    "\n\n Чтобы подтвердить адрес электронной почты, перейдите по ссылке https://restaurant-rent-server.herokuapp.com/account/confirm/" + token);
-            Transport.send(message);
-
-            // сохраняем полученный токен в базе данных
-            authTokenRepository.save(new AuthToken(token, user.getId()));
-
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-
+        AuthMessageService authMessageService = new AuthMessageService(email, user.getId(), authTokenRepository);
+        authMessageService.sendAuthMessage();
 
         return user;
     }
@@ -89,14 +50,12 @@ public class UserController {
     @PostMapping("/user/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public User loginUser(@RequestParam String email, @RequestParam String password, Model model) {
-        User user = userRepository.findByEmail(email);
-        Iterable<User> users = userRepository.findAll();
-        // ищем пользователя в базе данных
-        if (user.getPassword().equals(password)) {
-            return user;
+        // ищем владельца в базе данных
+        User user = userRepository.findByEmailAndPassword(email, password);
+        if (user == null) {
+            return new User();
         }
-        // если пользователь не зарегистрирован, отправляем пустого пользователя
-        return new User();
+        return user;
     }
 
     // метод обрабатывает запрос состояния электронной почты пользователя

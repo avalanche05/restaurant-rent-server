@@ -31,6 +31,7 @@ public class Rent {
         this.time = time;
     }
 
+
     public Long getId() {
         return id;
     }
